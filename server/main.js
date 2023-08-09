@@ -125,6 +125,11 @@ try {
         }
         if (mysettings.secureEnabled) {
             settings.secureEnabled = mysettings.secureEnabled;
+            if (!settings.tokenExpiresIn) {
+                settings.tokenExpiresIn = '1h';
+            }
+        }
+        if (mysettings.tokenExpiresIn) {
             settings.tokenExpiresIn = mysettings.tokenExpiresIn;
         }
         if (mysettings.smtp) {
@@ -132,6 +137,9 @@ try {
         }
         if (mysettings.daqstore) {
             settings.daqstore = mysettings.daqstore;
+        }
+        if (mysettings.alarms) {
+            settings.alarms = mysettings.alarms;
         }
     }
 } catch (err) {

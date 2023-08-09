@@ -1,4 +1,4 @@
-import { Tag } from './device';
+import { Device, DeviceType, Tag } from './device';
 
 export class Hmi {
     /** Layout for navigation menu, header bar, ...  */
@@ -102,7 +102,29 @@ export class HeaderSettings {
     infos: NotificationModeType;
     bkcolor = '#ffffff';
     fgcolor = '#000000';
+    fontFamily: string;
+    fontSize = 13;
+    items: HeaderItem[];
+    itemsAnchor: AnchorType = 'left';
 }
+
+export interface HeaderItem {
+    id: string;
+    type: HeaderItemType;
+    icon: string;
+    image: string;
+    bkcolor: string;
+    fgcolor: string;
+    marginLeft: number;
+    marginRight: number;
+    property: GaugeProperty;
+    status: GaugeStatus;
+    element: HTMLElement;
+}
+
+export type HeaderItemType = 'button' | 'label' | 'image';
+
+export type AnchorType = 'left' | 'center' | 'right';
 
 export enum NotificationModeType {
     hide = 'item.notifymode-hide',
@@ -134,14 +156,10 @@ export class DocProfile {
     margin = 10;
 }
 
-export class MyItem {
-
-}
-
 export class GaugeSettings {
     name = '';
     property: any = null;   // set to GaugeProperty after upgrate
-    label = '';     // Gauge type label
+    label = '';             // Gauge type label
     constructor(public id: string, public type: string) {
     }
 }
@@ -392,8 +410,14 @@ export class Variable {
     value: string;
     error: number;
     timestamp: number;
-    constructor(id: string, source: string, name: string) {
-        this.id = id; this.name = name; this.source = source;
+    device?: Device;
+    constructor(id: string, name: string, device?: Device) {
+        this.id = id;
+        this.name = name;
+        this.device = device;
+        if (device?.type === DeviceType.internal) {
+            this.value = '0';
+        }
     }
 }
 
